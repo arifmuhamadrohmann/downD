@@ -59,7 +59,8 @@ def login(interactive=True):
             return None
         secret = client_secret_path()
         if not os.path.exists(secret):
-            raise FileNotFoundError(f"client_secret.json not found. See README, or put it in {APP_DIR}")
+            raise FileNotFoundError(f"No Google OAuth client yet. Save your client_secret.json in {APP_DIR} "
+                                    "(the README explains how to create one), then log in again.")
         creds = InstalledAppFlow.from_client_secrets_file(secret, SCOPES).run_local_server(
             port=0, timeout_seconds=300, success_message="downD is connected. You can close this tab.")
     os.makedirs(APP_DIR, exist_ok=True)

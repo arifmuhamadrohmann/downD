@@ -36,13 +36,14 @@ Google Drive's own "Download" zips a folder at a time, splits large ones into pi
 
 ## Quick start
 
-1. Download `downD.exe` from the [**Releases**](../../releases) page and run it. *(No release yet? [Build it from source](#build-from-source) in a few minutes.)*
-2. Click **Login with Google** and allow access in your browser.
-3. Pick where to save, optionally switch on **Include shared files**, and click **Download all**.
+1. Download `downD.exe` from the [**Releases**](../../releases/latest) page.
+2. **One-time setup:** downD logs in through your own Google OAuth client, so your access never depends on someone else's project. [Create one](#create-your-google-oauth-client) (free, about 10 minutes) and save its JSON as `%APPDATA%\downD\client_secret.json`.
+3. Run `downD.exe`, click **Login with Google** and allow access in your browser.
+4. Pick where to save, optionally switch on **Include shared files**, and click **Download all**.
 
 > [!NOTE]
-> Until downD is verified by Google, the login shows a *"Google hasn't verified this app"* screen.
-> Click **Advanced → Go to downD** to continue. downD only asks to *see and download* your files.
+> Because your OAuth client is not verified by Google, the login shows a *"Google hasn't verified this app"* screen.
+> It is your own app: click **Advanced → Go to …** to continue. downD only asks to *see and download* your files.
 
 ### Requirements
 
@@ -101,20 +102,17 @@ python app.py
 
 `python app.py` needs a Google OAuth client first; see the next section.
 
-<details>
-<summary><b>Create your Google OAuth client</b> (free, about 10 minutes)</summary>
+### Create your Google OAuth client
 
-<br>
+Free, about 10 minutes, and needed only once.
 
 1. In the [Google Cloud Console](https://console.cloud.google.com/), create a project and enable the **Google Drive API** (*APIs & Services → Library*).
 2. Under *Google Auth Platform → Audience*, choose **External**. Under *Data Access*, add the scope `https://www.googleapis.com/auth/drive.readonly`.
 3. While the app is in **Testing**, add your Google account under *Test users*. Testing-mode logins expire after 7 days; set the app to **In production** to avoid that.
 4. Under *Clients*, create an OAuth client of type **Desktop app** and download its JSON.
-5. Save it as `client_secret.json` next to `app.py`. It is git-ignored; never commit it.
-
-To use your own client with a downloaded `downD.exe`, save the JSON as `%APPDATA%\downD\client_secret.json` instead; it takes precedence over the built-in one.
-
-</details>
+5. Save the JSON as:
+   - `%APPDATA%\downD\client_secret.json` when you use the downloaded `downD.exe`, or
+   - `client_secret.json` next to `app.py` when you run from source. It is git-ignored; never commit it.
 
 <details>
 <summary><b>Build the .exe</b></summary>
@@ -122,10 +120,10 @@ To use your own client with a downloaded `downD.exe`, save the JSON as `%APPDATA
 <br>
 
 ```bat
-build.bat
+build.bat --no-secret
 ```
 
-This builds the UI and then a single `dist\downD.exe` with the UI and `client_secret.json` inside. Google treats the secret of a desktop OAuth client as public, so shipping it in a release is expected.
+This builds the UI and then a single `dist\downD.exe`, the same way as the public releases. Without `--no-secret`, your `client_secret.json` is bundled too, so the exe logs in without any setup; only share that build with people who should use your Google Cloud project.
 
 </details>
 
@@ -178,7 +176,7 @@ Yes. downD is MIT-licensed, and the Google Drive API and Google login cost nothi
 
 <br>
 
-Apps that read your whole Drive need a paid yearly security review before Google removes that screen. Until then, unverified apps are limited to 100 users; [using your own OAuth client](#build-from-source) avoids the limit.
+The login goes through the OAuth client you created, and Google only removes that screen for apps that pass a paid yearly security review. Since the app on that screen is your own, it is safe to continue.
 
 </details>
 
