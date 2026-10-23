@@ -343,7 +343,8 @@ function StorageCard({ usage, limit }: { usage: number; limit: number | null }) 
 }
 
 function ActivityCard({ job }: { job: Job | null }) {
-  const files = [...(job?.current ? [job.current] : []), ...(job?.recent ?? [])].slice(0, 3)
+  // Two rows keep the sidebar inside the default window without scrolling.
+  const files = [...(job?.current ? [job.current] : []), ...(job?.recent ?? [])].slice(0, 2)
   const percent = job?.total ? Math.floor((job.index / job.total) * 100) : 0
   const title = !job ? 'Activity'
     : job.phase === 'scanning' ? 'Scanning Drive'
