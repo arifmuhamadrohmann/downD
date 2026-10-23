@@ -1,0 +1,5 @@
+google-api-python-client>=2.100
+google-auth-oauthlib>=1.2
+pywebview>=6.0
+# cryptography 50 ships an abi3t module (needs python3t.dll) that PyInstaller-built exes cannot load on Python 3.15.
+cryptography<50
